@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* 移动端输入框聚焦时不要缩放 */
+  input,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@layer components {
+  /* Markdown 正文（AI 回复）：跟随 Tailwind，别让排版破坏阅读节奏 */
+  .md-body {
+    @apply text-[15px] leading-[1.75] text-slate-800;
+    word-break: break-word;
+  }
+
+  .md-body > * + * {
+    @apply mt-2.5;
+  }
+
+  .md-body p {
+    @apply m-0;
+  }
+
+  .md-body strong {
+    @apply font-semibold text-slate-900;
+  }
+
+  .md-body ul,
+  .md-body ol {
+    @apply ml-5 list-outside space-y-1;
+  }
+
+  .md-body ul {
+    @apply list-disc;
+  }
+
+  .md-body ol {
+    @apply list-decimal;
+  }
+
+  .md-body code {
+    @apply rounded bg-slate-100 px-1 py-0.5 text-[13px];
+  }
+
+  .md-body pre {
+    @apply overflow-x-auto rounded-lg bg-slate-900 p-3 text-[13px] text-slate-100;
+  }
+
+  .md-body pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
+
+  .md-body h1,
+  .md-body h2,
+  .md-body h3 {
+    @apply mt-4 text-[15px] font-semibold text-slate-900;
+  }
+
+  /* 解析里的 `## 答案` / `## 完整解析` 是分节标题，要能与正文拉开层次 */
+  .md-body h2 {
+    @apply mt-5 text-[16px] tracking-tight;
+  }
+
+  /* 解析用它分隔 (1)(2)(3) 三个小问 */
+  .md-body hr {
+    @apply my-4 border-0 border-t border-dashed border-slate-200;
+  }
+
+  .md-body blockquote {
+    @apply border-l-2 border-slate-300 pl-3 text-slate-600;
+  }
+
+  /*
+    题干编辑区里的公式卡片：在 contenteditable 里是**一整个原子**
+    （装它的是 contenteditable=false 的 span），光标进不去、也不会被删掉半个。
+    染成品牌色是为了让学生一眼分清「哪些是我不想动的东西」。
+  */
+  .math-chip {
+    @apply inline-block cursor-pointer rounded px-1 align-middle;
+    max-width: 100%;
+    overflow-x: auto;
+    background: rgba(32, 70, 233, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(32, 70, 233, 0.22);
+    transition: background 0.12s ease;
+  }
+
+  .math-chip:active,
+  .math-chip:hover {
+    background: rgba(32, 70, 233, 0.14);
+  }
+
+  /* 编辑区里的公式不要撑行高（行高比正文大，KaTeX 自己也带上下留白） */
+  .math-chip .katex {
+    font-size: 1em;
+  }
+}
+
+/* KaTeX 在窄屏上可能溢出，允许横向滚动而不是撑破布局 */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 0;
+}
+
+/* 隐藏滚动条但保留滚动能力（对话页更清爽） */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
